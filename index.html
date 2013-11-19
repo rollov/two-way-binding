@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+
+<h1>Hello <span data-bind-123="firstName"></span>!</h1>
+
+<input type="text" data-bind-123="firstName" value=""/>
+<input type="text" data-bind-123="lastName" value=""/>
+<input type="text" data-bind-123="age" value=""/>
+
+<script src="dataBinding.js"></script>
+<script>
+    function User(userId) {
+        var user = {id:userId},
+                binder = new DataBinding.create(user);
+
+        user.set = function (name, val) {
+            user[name] = val;
+
+            binder.publish(name, val, this, function (arg) {
+                // console.log(value)
+            });
+        };
+
+        user.get = function (name) {
+            return user[name];
+        };
+
+        return user;
+    }
+
+    var user = new User('123');
+    user.set('firstName', 'rolf');
+    user.set('lastName', 'richter');
+    user.set('age', 32);
+
+</script>
+
+</body>
+</html>
