@@ -5,7 +5,8 @@
         var publicMethodes,
             callbacks = {},
             objectId = options.id,
-            self = this;
+            self = this,
+            attributes = {};
 
         function bindEvents (initiator) {
             var elements = document.querySelectorAll("[data-bind-" + objectId + "]");
@@ -47,14 +48,21 @@
                     // loop attributes and replace val placeholder
                     for (var a = elements[i].attributes.length - 1 ; a >= 0; a-- ) {
                         var attr = elements[i].attributes[a].value;
+
+                        // current attribute had a {value placeholder} so set it again
+                        if (attributes[i + '-' + a]) {
+                              attr = cache[i + '-' + a].attr;
+                        }
+
                         if (attr.match(/{value}/)) {
+                            // cache the attribute to overwrite it later again
+                            attributes[i + '-' +     a] = {
+                                attr : attr
+                            };
                             attr = attr.replace(/{value}/g, value);
                             elements[i].attributes[a].value = attr;
                         }
                     }
-
-                    if (elements[i].toString().match(/value/))
-                       console.log(elements[i].toString().replace(/{value}/, value));
 
                     if (elements[i].hasFocus() == false)
                         if (elements[i].tagName == 'INPUT') {
@@ -67,7 +75,7 @@
                         options.data[prop] = value;
                 }
 
-                callbacks[prop] && callbacks[prop](value);
+                callbacks[prop] && callbacks[prop](prop, value);
             }
         };
 
@@ -81,3 +89,23 @@
         return instance
     };
 })(window);
+
+function Model(userId) {
+    var model = {},
+        binder = new DataBinding.create({
+            id:userId,
+            data:model
+        });
+
+    model.set = function (name, val, callback) {
+        model[name] = val;
+
+        binder.publish(name, val, this, callback);
+    };
+
+    model.get = function (name) {
+        return model[name];
+    };
+
+    return model;
+}

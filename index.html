@@ -1,40 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>Two Way Data Binding</title>
 </head>
 <body>
 
 <h1>Hello <span data-bind-100="firstName"></span> <span data-bind-100="lastName"></span>!</h1>
 
 <p>
-    <a data-bind-100="lastName" href="#lastName={value}"></a>
+    <a data-bind-100="lastName" href="#{value}" id="{value}">ein link</a>
 </p>
 
 <script src="dataBinding.js"></script>
 <script>
-    function User(userId) {
-        var user = {},
-            binder = new DataBinding.create({
-                id : userId,
-                data : user
-            });
-
-        user.set = function (name, val) {
-            user[name] = val;
-
-            binder.publish(name, val, this, function (arg) {
-                // console.log(arg);
-            });
-        };
-
-        user.get = function (name) {
-            return user[name];
-        };
-
-        return user;
-    }
-
     // create some test users
     var body = document.getElementsByTagName('body')[0];
     for (i = 100; i > 90; i--) {
@@ -54,14 +32,15 @@
         body.appendChild(input);
         body.appendChild(document.createElement('br'));
 
-        var user = new User(i);
-        user.set('firstName', 'rolf_' + i);
+        var user = new Model(i);
+        user.set('firstName', 'rolf_' + i, function (prop, val) {
+            console.log(val);
+        });
         user.set('lastName', 'richter_' + i);
         user.set('age', (i / 2).toFixed());
     }
 
-
 </script>
-
+       gg
 </body>
 </html>
