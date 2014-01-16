@@ -15,7 +15,7 @@ password | string (required) |
 
 **response representation**
 
-```php
+```json
 {
   "userId" : "$userId",
   "shops" : [{"id" : "$shopId"}]
@@ -40,7 +40,7 @@ password | string (required) |
 
 **response representation**
 
-```php
+```json
 {
   "state" : "created",
   "email" : "$email"
@@ -57,7 +57,7 @@ sessionCookie | string (required) |
 
 **response representation**
 
-```
+```json
 {
   "state" : "deleted",
   "userId" : "$userId"
@@ -84,7 +84,7 @@ password | string (required) |
 
 **response representation**
 
-```
+```json
 {
   "sessionCookie" : "$sessionCookie",
   "authURL" : "$authURL"
